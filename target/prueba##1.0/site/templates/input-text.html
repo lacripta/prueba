@@ -1,0 +1,12 @@
+<div class="col-xs-{{col}}" ng-form="interno">
+    <div>
+        <div class="form-group" ng-class="{'has-error' : !interno.entrada.$valid}"  >
+            <label class="control-label">{{titulo}}</label>
+            <input type="text" class="form-control" placeholder="{{titulo}}" name="entrada"
+                   ng-readonly="readonly" ng-required="required" ng-model="valor" >
+            <span class="help-block col-xs-12" ng-show="interno.entrada.$touched">
+                <small class="help-block" ng-show="interno.entrada.$error.required">Este campo es requerido</small>
+            </span>
+        </div>
+    </div>
+</div>

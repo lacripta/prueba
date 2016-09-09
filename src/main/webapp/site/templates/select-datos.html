@@ -1,0 +1,13 @@
+<div class="col-xs-{{col}}">
+    <div class="form-group" ng-form="interno">
+        <label class="control-label">{{titulo}}</label>
+        <select class="select form-control" name="entrada" ng-required="{{required}}"
+                ng-model="valor" style="width:100%" ng-readonly="{{readonly}}">
+            <option></option>
+            <option ng-repeat="resrev in datos" value="{{resrev[value]}}">{{resrev[value]}} - {{resrev[label]}}</option>
+        </select>
+        <span class="help-block col-xs-12" ng-show="interno.entrada.$touched">
+            <small class="help-block" ng-show="interno.entrada.$error.required">Este campo es requerido</small>
+        </span>
+    </div>
+</div>
