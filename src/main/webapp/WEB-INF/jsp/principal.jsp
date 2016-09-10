@@ -20,7 +20,7 @@
                     </div>
                     <div class="panel-body">
                         <div class="col-xs-12">
-                            <button class="btn btn-raised btn-info" ng-click="mn.verElemento()">
+                            <button class="btn btn-raised btn-info" ng-click="mn.nuevoElemento()">
                                 nuevo servidor
                             </button>
                         </div>
@@ -75,6 +75,17 @@
                 vm.dtInstance = {};
                 vm.verElemento = verElemento;
                 vm.borrarElemento = borrarElemento;
+                vm.nuevoElemento = nuevoElemento;
+                function nuevoElemento() {
+                    $scope.selected.accion = 'nuevo';
+                    var modalInstance = $uibModal.open({
+                        templateUrl: "/prueba/server_new",
+                        controller: ServerModalController,
+                        scope: $scope,
+                        size: 'sm',
+                        windowClass: "animated fadeIn"
+                    });
+                }
                 function verElemento(id) {
                     $scope.selected = vm.dtInstance.DataTable.row(id).data();
                     $scope.selected.accion = 'ver';
@@ -115,19 +126,20 @@
                 function ServerModalController($scope, $uibModalInstance, Notificar) {
                     $scope.ok = function (ok) {
                         if (ok) {
-                            console.log($scope.selected.accion);
                             switch ($scope.selected.accion) {
                                 case "ver":
                                     ServidoresRest.editar($scope.selected).then(function (json) {
                                         Notificar.ajax(json);
+                                        $scope.selected = {};
                                     }, function (err) {
                                         console.log(err);
                                         Notificar.error();
                                     });
                                     break;
                                 case "nuevo":
-                                    ServidoresRest.agregar($scope.slected).then(function (json) {
+                                    ServidoresRest.agregar($scope.selected).then(function (json) {
                                         Notificar.ajax(json);
+                                        $scope.selected = {};
                                     }, function (err) {
                                         console.log(err);
                                         Notificar.error();
@@ -138,8 +150,6 @@
                                 vm.dtInstance.changeData(ServidoresRest.listar());
                             }, 500);
                             $uibModalInstance.close();
-
-                            $scope.selected = {};
                         } else {
                             Notificar.form();
                         }

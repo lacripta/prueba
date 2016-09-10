@@ -38,21 +38,20 @@ public class pruebaModel {
 
     }
 
-    public Map<String, Object> AgregarServidores() {
-        Server edita = new Server();
+    public Map<String, Object> AgregarServidores(Server nuevo) {
         Map<String, Object> salida = new HashMap();
-        Integer editados = edita.editServer(edita);
-        if (editados > 0) {
-            salida.put("mensaje", "CAMBIOS REALIZADOS CORRECTAMENTE");
-            salida.put("respuesta", "Se cambio la información del servidor: " + edita.getName());
+        Integer creados = nuevo.addServer(nuevo);
+        if (creados > 0) {
+            salida.put("mensaje", "SERVIDOR CREADO CORRECTAMENTE");
+            salida.put("respuesta", "Se creo el nuevo servidor: " + nuevo.getName());
             salida.put("data", "-");
-            salida.put("cantidad", editados);
+            salida.put("cantidad", creados);
             salida.put("estado", 1);
         } else {
             salida.put("mensaje", "NO SE HAN REALIZADO CAMBIOS");
-            salida.put("respuesta", "no se hicieron cambios en el servidor: " + edita.getName());
+            salida.put("respuesta", "no se agregado ningun servidor");
             salida.put("data", "-");
-            salida.put("cantidad", editados);
+            salida.put("cantidad", creados);
             salida.put("estado", 0);
         }
         return salida;

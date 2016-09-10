@@ -1,2 +1,4 @@
 com\elibom\prueba\pruebaController.class
 com\elibom\prueba\pruebaModel.class
+datos\conex.class
+datos\Server.class

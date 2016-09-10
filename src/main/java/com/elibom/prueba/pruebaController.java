@@ -56,6 +56,8 @@ public class pruebaController {
                 return Response.ok(new Viewable("/principal")).build();
             case "server_details":
                 return Response.ok(new Viewable("/server_modal")).build();
+            case "server_new":
+                return Response.ok(new Viewable("/server_modal_crear")).build();
             default:
                 return Response.status(204).build();
         }
@@ -77,9 +79,12 @@ public class pruebaController {
     @POST
     @Path("/server")
     public Response AgergarServidores(
+            @FormParam("name") String name,
+            @FormParam("state") String state,
             @Context HttpServletRequest request) {
+        Server nuevo = new Server(name, state);
         return Response.ok().entity(
-                gson.toJson(model.AgregarServidores())
+                gson.toJson(model.AgregarServidores(nuevo))
         ).build();
     }
 

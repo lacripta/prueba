@@ -1,7 +1,7 @@
 function selectConfirma() {
     return {
         restrict: 'E',
-        templateUrl: '/ng_enelar/templates/select-confirma.html',
+        templateUrl: 'site/templates/select-confirma.html',
         scope: {
             valor: '=',
             col: '@',
@@ -23,7 +23,7 @@ function selectConfirma() {
 function selectDatos() {
     return {
         restrict: 'E',
-        templateUrl: '/ng_enelar/templates/select-datos.html',
+        templateUrl: 'site/templates/select-datos.html',
         scope: {
             valor: '=',
             datos: '=',
@@ -47,7 +47,7 @@ function selectDatos() {
 function selectSimple() {
     return {
         restrict: 'E',
-        templateUrl: '/ng_enelar/templates/select-simple.html',
+        templateUrl: 'site/templates/select-simple.html',
         scope: {
             valor: '=',
             datos: '=',
@@ -71,7 +71,7 @@ function selectSimple() {
 function selectObjeto() {
     return {
         restrict: 'E',
-        templateUrl: '/ng_enelar/templates/select-datos.html',
+        templateUrl: 'site/templates/select-datos.html',
         scope: {
             valor: '=',
             datos: '=',
@@ -95,7 +95,7 @@ function selectObjeto() {
 function inputText() {
     return {
         restrict: 'E',
-        templateUrl: '/ng_enelar/templates/input-text.html',
+        templateUrl: 'site/templates/input-text.html',
         link: function (scope, element) {
             $.material.init(element);
         },
@@ -118,7 +118,7 @@ function inputText() {
 function inputNumber() {
     return {
         restrict: 'E',
-        templateUrl: '/ng_enelar/templates/input-number.html',
+        templateUrl: 'site/templates/input-number.html',
         link: function (scope, element) {
             $.material.init(element);
         },
@@ -137,7 +137,7 @@ function inputNumber() {
 function inputRadio() {
     return {
         restrict: 'E',
-        templateUrl: '/ng_enelar/templates/input-radio.html',
+        templateUrl: 'site/templates/input-radio.html',
         link: function (scope, element) {
             $.material.init(element);
         },
@@ -157,7 +157,7 @@ function inputRadio() {
 function inputDate() {
     return {
         restrict: 'E',
-        templateUrl: '/ng_enelar/templates/input-date.html',
+        templateUrl: 'site/templates/input-date.html',
         scope: {
             options: '&',
             valor: '=',
@@ -190,7 +190,7 @@ function inputDate() {
 function inputMeses() {
     return {
         restrict: 'E',
-        templateUrl: '/ng_enelar/templates/input-date.html',
+        templateUrl: 'site/templates/input-date.html',
         scope: {
             valor: '=',
             readonly: '=',

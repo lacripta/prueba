@@ -14,15 +14,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.MapListHandler;
 
 /**
  *
@@ -52,22 +47,22 @@ public class conex implements Closeable {
      * ESTABLECE UNA CONEXION CON LA BASE DE DATOS SIN AUTO COMMIT USANDO LAS
      * CREDENCIALES POR DEFECTO DE LA LIBRERIA
      *
+     * @throws java.lang.ClassNotFoundException
+     * @throws java.sql.SQLException
      */
-    public conex() {
+    public conex() throws ClassNotFoundException, SQLException {
         this.gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd")
                 .setPrettyPrinting()
                 .serializeNulls()
                 .create();
-        try {
-            this.url = "jdbc:mysql://localhost:3306/elibom";
-            Class.forName("com.mysql.jdbc.Driver");
-            this.db = DriverManager.getConnection(this.url, "root", "");
-            this.db.setAutoCommit(false);
-            this.query = new QueryRunner();
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(conex.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
+        this.url = "jdbc:mysql://localhost:3306/elibom";
+        Class.forName("com.mysql.jdbc.Driver");
+        this.db = DriverManager.getConnection(this.url, "root", "910320");
+        this.db.setAutoCommit(false);
+        this.query = new QueryRunner();
+
     }
 
     /**
@@ -75,22 +70,23 @@ public class conex implements Closeable {
      * @param sid
      * @param pwd
      *
+     * @throws java.lang.ClassNotFoundException
+     * @throws java.sql.SQLException
+     *
      */
-    public conex(String sid, String pwd) {
+    public conex(String sid, String pwd) throws ClassNotFoundException, SQLException {
         this.gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd")
                 .setPrettyPrinting()
                 .serializeNulls()
                 .create();
-        try {
-            this.url = "jdbc:mysql://localhost:3306/elibom";
-            Class.forName("com.mysql.jdbc.Driver");
-            this.db = DriverManager.getConnection(this.url, sid, pwd);
-            this.db.setAutoCommit(false);
-            this.query = new QueryRunner();
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(conex.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
+        this.url = "jdbc:mysql://localhost:3306/elibom";
+        Class.forName("com.mysql.jdbc.Driver");
+        this.db = DriverManager.getConnection(this.url, sid, pwd);
+        this.db.setAutoCommit(false);
+        this.query = new QueryRunner();
+
     }
 
     /**
@@ -194,75 +190,6 @@ public class conex implements Closeable {
             db.cerrar();
             Logger.getLogger(conex.class.getName()).log(Level.SEVERE, null, ex);
             return ex.getLocalizedMessage();
-        }
-    }
-
-    /**
-     * REALIZA UNA CONSULTA DE SELECT SIN PARAMETROS. este metodo recibe la
-     * consulta para un select y la ejecuta para luego retornar los resultados.
-     * este metodo adicionalmente recibe un parametro <b>true</b> o <b>false</b>
-     * para indicar si se debe cerrar la conexion al terminar el llamado indicar
-     *
-     * @param db
-     * @param sql      sentencia SQL del select a ejecutar
-     * @param terminar indica si debe hacer commit y cerrar la conexion
-     *
-     * @return retorna la lista de los registros encontrados o un mensaje de
-     *         error en un campo llamado mensaje en la posicion 0 de la lista
-     */
-    public List<Map<String, Object>> select(conex db, String sql, boolean terminar) {
-        List<Map<String, Object>> afectados;
-        try {
-            afectados = db.getQuery().query(db.getDB(), sql, new MapListHandler());
-            if (terminar) {
-                db.cerrar();
-            }
-            return afectados;
-        } catch (SQLException ex) {
-            db.cerrar();
-            afectados = new ArrayList();
-            afectados.add(new HashMap());
-            afectados.get(0).put("ERROR", ex);
-            Logger.getLogger(conex.class.getName()).log(Level.SEVERE, null, ex);
-            return afectados;
-        }
-    }
-
-    /**
-     * REALIZA UNA CONSULTA DE SELECT CON PARAMETROS. este metodo recibe la
-     * consulta para un select y los parametros de este mismo. este metodo
-     * adicionalmente recibe un parametro <b>true</b> o <b>false</b> para
-     * indicar si se debe cerrar la conexion al terminar el llamado indicar
-     *
-     * @param db
-     * @param sql      sentencia SQL del select a ejecutar
-     * @param datos    parametros de la sentencia a ejecutar
-     * @param terminar indica si debe hacer commit y cerrar la conexion
-     *
-     * @return retorna la lista de los registros encontrados o un mensaje de
-     *         error en un campo llamado mensaje en la posicion 0 de la lista
-     */
-    public List<Map<String, Object>> select(conex db, String sql, Object[] datos, boolean terminar) {
-        List<Map<String, Object>> afectados;
-        try {
-            afectados = db.getQuery().query(db.getDB(), sql, new MapListHandler(), datos);
-            if (terminar) {
-                db.cerrar();
-            }
-            if (!afectados.isEmpty()) {
-                afectados.get(0).put("ESTADO_PETICION", 1);
-            }
-            return afectados;
-        } catch (SQLException ex) {
-            if (terminar) {
-                db.cerrar();
-            }
-            afectados = new ArrayList();
-            afectados.add(new HashMap());
-            afectados.get(0).put("ERROR", ex);
-            afectados.get(0).put("ESTADO_PETICION", 0);
-            Logger.getLogger(conex.class.getName()).log(Level.SEVERE, null, ex);
-            return afectados;
         }
     }
 

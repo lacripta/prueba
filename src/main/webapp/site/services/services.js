@@ -23,6 +23,7 @@ function ServidoresRest($http, $q, Base64) {
     function agregar(data) {
         var defered = $q.defer();
         var promise = defered.promise;
+        $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode('admin' + ':' + 'abc12345');
         $http({
             cache: true,
             method: 'POST',
@@ -53,15 +54,14 @@ function ServidoresRest($http, $q, Base64) {
         });
         return promise;
     }
-    function borrar(data) {
+    function borrar(id) {
         var defered = $q.defer();
         var promise = defered.promise;
+        $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode('admin' + ':' + 'abc12345');
         $http({
             cache: true,
             method: 'DELETE',
-            url: '/prueba/server/' + data.id,
-            data: $.param(data),
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            url: '/prueba/server/' + id
         }).success(function (data) {
             defered.resolve(data);
         }).error(function (err) {

@@ -106,6 +106,17 @@ public class Server {
         return null;
     }
 
+    public Integer addServer(Server server) {
+        try (conex db = new conex()) {
+            String sql = "insert into server (name,state) values(?,?)";
+            Integer servers = db.getQuery().update(db.getDB(), sql, new Object[]{server.name, server.state});
+            return servers;
+        } catch (IOException | SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
     public Integer deleteServer(Integer id) {
         try (conex db = new conex()) {
             String sql = "delete from server where id = ?";
