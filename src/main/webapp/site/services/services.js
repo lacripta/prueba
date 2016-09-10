@@ -1,4 +1,4 @@
-function ServidoresRest($http, $q) {
+function ServidoresRest($http, $q, Base64) {
     return {
         listar: listar,
         agregar: agregar,
@@ -8,12 +8,11 @@ function ServidoresRest($http, $q) {
     function listar() {
         var defered = $q.defer();
         var promise = defered.promise;
+        $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode('admin' + ':' + 'abc12345');
         $http({
-            cache: true,
+            cache: false,
             method: 'GET',
-            url: '/servidores/listar',
-            //data: $.param({numord: $scope.BUSCARORDEN}),
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            url: '/prueba/server'
         }).success(function (data) {
             defered.resolve(data);
         }).error(function (err) {
@@ -27,7 +26,7 @@ function ServidoresRest($http, $q) {
         $http({
             cache: true,
             method: 'POST',
-            url: '/servidores/agregar',
+            url: '/prueba/server',
             data: $.param(data),
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).success(function (data) {
@@ -40,10 +39,11 @@ function ServidoresRest($http, $q) {
     function editar(data) {
         var defered = $q.defer();
         var promise = defered.promise;
+        $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode('admin' + ':' + 'abc12345');
         $http({
             cache: true,
             method: 'PUT',
-            url: '/servidores/editar/' + data.id,
+            url: '/prueba/server/' + data.id,
             data: $.param(data),
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).success(function (data) {
@@ -59,7 +59,7 @@ function ServidoresRest($http, $q) {
         $http({
             cache: true,
             method: 'DELETE',
-            url: '/servidores/borrar/' + data.id,
+            url: '/prueba/server/' + data.id,
             data: $.param(data),
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).success(function (data) {

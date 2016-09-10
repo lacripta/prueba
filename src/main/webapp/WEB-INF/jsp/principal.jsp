@@ -5,8 +5,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title></title>
         <style>
-            md-input-container .md-errors-spacer {
-                min-height: 0 !important;
+            .glyphicon{
+                font-size: large;
             }
         </style>
         <%@include file="html/header.jsp" %>
@@ -16,29 +16,26 @@
             <div class="col-xs-8 col-xs-push-2">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <h3 class="">Ingreso de Convenio de Facturación</h3>
+                        <h3 class="">Gestión de Servidores registrados</h3>
                     </div>
                     <div class="panel-body">
-                        <form name="datosEmpresa" class="">
-                            <fieldset>
-                                <select-datos titulo="Nit." valor="mn.convenio.NITEMP" col="12" required="true" datos="empresas" label="NOMEMP" value="NITEMP"></select-datos>
-                                <input-number titulo="Número de Convenio" valor="mn.convenio.NUMCON" col="12" required="true"></input-number>
-                                <input-text titulo="Representante" valor="mn.convenio.REPEMP" col="12" required="true"></input-text>
-                                <input-text titulo="Dirección" valor="mn.convenio.OBJETO" col="12" required="true"></input-text>
-                                <input-date titulo="Fecha de Inicio" valor="mn.convenio.FECINI" col="12" required="true"></input-date>
-                                <input-date titulo="Fecha de Terminación" valor="mn.convenio.FECFIN" col="12" required="true"></input-date>
-                            </fieldset>
-                            <div class="col-xs-12 text-center">
-                                <button class="btn btn-raised btn-info" ng-click="mn.guardar(datosEmpresa.$valid)">guardar</button>
-                            </div>
-                        </form>
+                        <div class="col-xs-12">
+                            <button class="btn btn-raised btn-info" ng-click="mn.borrarElemento()">
+                                nuevo servidor
+                            </button>
+                        </div>
+                        <div class="col-sm-12">
+                            <table datatable="" dt-options="mn.dtOptions" dt-columns="mn.dtColumns" dt-instance="mn.dtInstance"
+                                   class="table table-bordered table-condensed table-hover table-responsive table-striped">
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <%@include file="html/footer.jsp" %>
         <script>
-            function MainController($scope, $http, Notificar, ServidoresRest) {
+            function MainController($timeout, $compile, $scope, $uibModal, DTOptionsBuilder, DTColumnBuilder, Notificar, ServidoresRest) {
                 var vm = this;
                 ServidoresRest.listar().then(function (json) {
                     Notificar.ajax(json);
@@ -46,8 +43,91 @@
                 }, function (err) {
                     Notificar.error();
                 });
+                $scope.selected = {};
+                $scope.estados = [
+                    {estado: 'INACTIVO', state: 'idle'},
+                    {estado: 'DETENIDO', state: 'stopped'},
+                    {estado: 'EN EJECUCIÓN', state: 'running'}
+                ];
+                vm.dtOptions = DTOptionsBuilder.fromFnPromise(ServidoresRest.listar())
+                        .withOption('processing', true)
+                        .withOption('order', [])
+                        .withDataProp('data')
+                        .withLanguageSource('/prueba/site/js/dtSpanish.json')
+                        .withDisplayLength(15)
+                        .withPaginationType('full_numbers')
+                        .withOption('fnRowCallback',
+                                function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                                    $compile(nRow)($scope);
+                                })
+                        .withSelect({
+                            style: 'os',
+                            selector: 'td'
+                        });
+                vm.dtColumns = [
+                    DTColumnBuilder.newColumn('name').withTitle('Nombre'),
+                    DTColumnBuilder.newColumn('state').withTitle('Estado'),
+                    DTColumnBuilder.newColumn('').withTitle('').renderWith(function (data, type, full, meta) {
+                        return "<a class='text-info text-uppercase' ng-click='mn.verElemento(" + meta.row + ")'><b>ver</b></a>"
+                                + "<a class='text-danger text-uppercase' ng-click='mn.verElemento(" + meta.row + ")'><b><i class='pull-right glyphicon glyphicon-remove'></i></b></a>";
+                    })
+                ];
+                vm.dtInstance = {};
+                vm.verElemento = verElemento;
+                function verElemento(id) {
+                    $scope.selected = vm.dtInstance.DataTable.row(id).data();
+                    $scope.selected.accion = 'ver';
+                    var modalInstance = $uibModal.open({
+                        templateUrl: "/prueba/server_details",
+                        controller: ServerModalController,
+                        scope: $scope,
+                        size: 'sm',
+                        windowClass: "animated fadeIn"
+                    });
+                }
+                function borrarElemento(id) {
+
+                }
+                function ServerModalController($scope, $uibModalInstance, Notificar) {
+                    $scope.ok = function (ok) {
+                        if (ok) {
+                            console.log($scope.selected.accion);
+                            switch ($scope.selected.accion) {
+                                case "ver":
+                                    ServidoresRest.editar($scope.selected).then(function (json) {
+                                        Notificar.ajax(json);
+                                    }, function (err) {
+                                        console.log(err);
+                                        Notificar.error();
+                                    });
+                                    break;
+                                case "nuevo":
+                                    ServidoresRest.agregar($scope.slected).then(function (json) {
+                                        Notificar.ajax(json);
+                                    }, function (err) {
+                                        console.log(err);
+                                        Notificar.error();
+                                    });
+                                    break;
+                            }
+                            $timeout(function () {
+                                vm.dtInstance.changeData(ServidoresRest.listar());
+                            }, 500);
+                            $uibModalInstance.close();
+
+                            $scope.selected = {};
+                        } else {
+                            Notificar.form();
+                        }
+                    };
+                    $scope.cancel = function () {
+                        $uibModalInstance.dismiss('cancel');
+                    };
+                }
             }
             angular.module('prueba', [
+                'datatables',
+                'datatables.select',
                 'oitozero.ngSweetAlert',
                 'ngSanitize',
                 'ui.bootstrap',
