@@ -5,7 +5,9 @@
  */
 package com.elibom.prueba;
 
+import datos.Server;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,19 +18,28 @@ public class pruebaModel {
 
     public Map<String, Object> ListarServidores() {
         Map<String, Object> salida = new HashMap();
-        String sql = "";
-        salida.put("mensaje", "OK");
-        salida.put("respuesta", "OK");
-        salida.put("data", "");
-        salida.put("cantidad", "1");
-        salida.put("estado", 1);
+        Server server = new Server();
+        List<Server> servidores = server.findAll();
+        if (servidores.isEmpty()) {
+            salida.put("mensaje", "NO SE HAN ENCONTRADO DATOS");
+            salida.put("respuesta", "No existen servidores registrados actualmente");
+            salida.put("data", servidores);
+            salida.put("cantidad", servidores.size());
+            salida.put("estado", 0);
+        } else {
+            salida.put("mensaje", "SE HA ENCONTRADO LOS SERVIDORES");
+            salida.put("respuesta", "Lista de los servidores registrados");
+            salida.put("data", servidores);
+            salida.put("cantidad", servidores.size());
+            salida.put("estado", 1);
+        }
+
         return salida;
 
     }
 
     public Map<String, Object> AgregarServidores() {
         Map<String, Object> salida = new HashMap();
-        String sql = "";
         salida.put("mensaje", "OK");
         salida.put("respuesta", "OK");
         salida.put("data", "");
@@ -38,9 +49,8 @@ public class pruebaModel {
 
     }
 
-    public Map<String, Object> EditarServidores() {
+    public Map<String, Object> EditarServidores(Server edita) {
         Map<String, Object> salida = new HashMap();
-        String sql = "";
         salida.put("mensaje", "OK");
         salida.put("respuesta", "OK");
         salida.put("data", "");
