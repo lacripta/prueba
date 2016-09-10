@@ -39,12 +39,22 @@ public class pruebaModel {
     }
 
     public Map<String, Object> AgregarServidores() {
+        Server edita = new Server();
         Map<String, Object> salida = new HashMap();
-        salida.put("mensaje", "OK");
-        salida.put("respuesta", "OK");
-        salida.put("data", "");
-        salida.put("cantidad", "1");
-        salida.put("estado", 1);
+        Integer editados = edita.editServer(edita);
+        if (editados > 0) {
+            salida.put("mensaje", "CAMBIOS REALIZADOS CORRECTAMENTE");
+            salida.put("respuesta", "Se cambio la información del servidor: " + edita.getName());
+            salida.put("data", "-");
+            salida.put("cantidad", editados);
+            salida.put("estado", 1);
+        } else {
+            salida.put("mensaje", "NO SE HAN REALIZADO CAMBIOS");
+            salida.put("respuesta", "no se hicieron cambios en el servidor: " + edita.getName());
+            salida.put("data", "-");
+            salida.put("cantidad", editados);
+            salida.put("estado", 0);
+        }
         return salida;
 
     }
@@ -63,20 +73,30 @@ public class pruebaModel {
             salida.put("respuesta", "no se hicieron cambios en el servidor: " + edita.getName());
             salida.put("data", "-");
             salida.put("cantidad", editados);
-            salida.put("estado", 1);
+            salida.put("estado", 0);
         }
         return salida;
 
     }
 
-    public Map<String, Object> BorrarServidores() {
+    public Map<String, Object> BorrarServidores(Integer id) {
+        Server edita = new Server();
+        edita = edita.findServerById(id);
         Map<String, Object> salida = new HashMap();
-        String sql = "";
-        salida.put("mensaje", "OK");
-        salida.put("respuesta", "OK");
-        salida.put("data", "");
-        salida.put("cantidad", "1");
-        salida.put("estado", 1);
+        Integer editados = edita.deleteServer(id);
+        if (editados > 0) {
+            salida.put("mensaje", "SERVIDOR ELIMINADO");
+            salida.put("respuesta", "Se borro el servidor: " + edita.getName());
+            salida.put("data", "-");
+            salida.put("cantidad", editados);
+            salida.put("estado", 1);
+        } else {
+            salida.put("mensaje", "NO SE HAN REALIZADO CAMBIOS");
+            salida.put("respuesta", "no se hicieron cambios en el servidor: " + edita.getName());
+            salida.put("data", "-");
+            salida.put("cantidad", editados);
+            salida.put("estado", 0);
+        }
         return salida;
 
     }

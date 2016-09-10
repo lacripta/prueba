@@ -20,7 +20,7 @@
                     </div>
                     <div class="panel-body">
                         <div class="col-xs-12">
-                            <button class="btn btn-raised btn-info" ng-click="mn.borrarElemento()">
+                            <button class="btn btn-raised btn-info" ng-click="mn.verElemento()">
                                 nuevo servidor
                             </button>
                         </div>
@@ -35,7 +35,7 @@
         </div>
         <%@include file="html/footer.jsp" %>
         <script>
-            function MainController($timeout, $compile, $scope, $uibModal, DTOptionsBuilder, DTColumnBuilder, Notificar, ServidoresRest) {
+            function MainController($timeout, $compile, $scope, $uibModal, DTOptionsBuilder, DTColumnBuilder, Notificar, ServidoresRest, SweetAlert) {
                 var vm = this;
                 ServidoresRest.listar().then(function (json) {
                     Notificar.ajax(json);
@@ -67,13 +67,14 @@
                 vm.dtColumns = [
                     DTColumnBuilder.newColumn('name').withTitle('Nombre'),
                     DTColumnBuilder.newColumn('state').withTitle('Estado'),
-                    DTColumnBuilder.newColumn('').withTitle('').renderWith(function (data, type, full, meta) {
+                    DTColumnBuilder.newColumn('id').withTitle('').renderWith(function (data, type, full, meta) {
                         return "<a class='text-info text-uppercase' ng-click='mn.verElemento(" + meta.row + ")'><b>ver</b></a>"
-                                + "<a class='text-danger text-uppercase' ng-click='mn.verElemento(" + meta.row + ")'><b><i class='pull-right glyphicon glyphicon-remove'></i></b></a>";
+                                + "<a class='text-danger text-uppercase' ng-click='mn.borrarElemento(" + data + ")'><b><i class='pull-right glyphicon glyphicon-remove'></i></b></a>";
                     })
                 ];
                 vm.dtInstance = {};
                 vm.verElemento = verElemento;
+                vm.borrarElemento = borrarElemento;
                 function verElemento(id) {
                     $scope.selected = vm.dtInstance.DataTable.row(id).data();
                     $scope.selected.accion = 'ver';
@@ -86,7 +87,30 @@
                     });
                 }
                 function borrarElemento(id) {
-
+                    SweetAlert.swal({
+                        title: "SE BORRARA EL ELEMENTO SELECCIONADO",
+                        text: "Seguro de borrar este servidor?",
+                        type: "warning",
+                        showCancelButton: false,
+                        confirmButtonText: "Aceptar",
+                        cancelButtonText: "Cancelar",
+                        closeOnConfirm: true,
+                        closeOnCancel: true
+                    }, function (isConfirm) {
+                        if (isConfirm) {
+                            ServidoresRest.borrar(id).then(function (json) {
+                                Notificar.ajax(json);
+                                $timeout(function () {
+                                    vm.dtInstance.changeData(ServidoresRest.listar());
+                                }, 500);
+                            }, function (err) {
+                                console.log(err);
+                                Notificar.error();
+                            });
+                        } else {
+                            Notificar.cancelado();
+                        }
+                    });
                 }
                 function ServerModalController($scope, $uibModalInstance, Notificar) {
                     $scope.ok = function (ok) {

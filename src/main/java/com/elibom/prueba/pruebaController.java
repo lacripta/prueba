@@ -97,12 +97,15 @@ public class pruebaController {
     }
 
     @DELETE
-    @Path("/server/{tipo}")
+    @Path("/server/{id: [0-9]+}")
     public Response BorrarServidores(
-            @PathParam("tipo") String tipo,
+            @PathParam("id") Integer id,
             @Context HttpServletRequest request) {
+        if (VerificaPeticion(request.getHeader("authorization"))) {
+            return Response.ok().entity(gson.toJson(AccesoDenegado())).header("content-type", MediaType.APPLICATION_JSON).build();
+        }
         return Response.ok().entity(
-                gson.toJson(model.BorrarServidores())
+                gson.toJson(model.BorrarServidores(id))
         ).build();
 
     }
