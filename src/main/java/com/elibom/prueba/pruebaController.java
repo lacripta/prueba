@@ -8,8 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.ejb.Stateless;
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -70,11 +70,14 @@ public class pruebaController {
 
     @POST
     @Path("/server")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response AgergarServidores(
-            @FormParam("name") String name,
-            @FormParam("state") String state,
+            Server nuevo,
             @Context HttpServletRequest request) {
-        Server nuevo = new Server(name, state);
+        if (VerificaPeticion(request.getHeader("authorization"))) {
+            return Response.ok().entity(gson.toJson(AccesoDenegado())).header("content-type", MediaType.APPLICATION_JSON).build();
+        }
         return Response.ok().entity(
                 gson.toJson(model.AgregarServidores(nuevo))
         ).build();
@@ -82,12 +85,14 @@ public class pruebaController {
 
     @PUT
     @Path("/server/{id: [0-9]+}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response ActualizarServidores(
-            @PathParam("id") Integer id,
-            @FormParam("name") String name,
-            @FormParam("state") String state,
+            Server server,
             @Context HttpServletRequest request) {
-        Server server = new Server(name, state, id);
+        if (VerificaPeticion(request.getHeader("authorization"))) {
+            return Response.ok().entity(gson.toJson(AccesoDenegado())).header("content-type", MediaType.APPLICATION_JSON).build();
+        }
         return Response.ok().entity(
                 gson.toJson(model.EditarServidores(server))
         ).build();
@@ -95,6 +100,7 @@ public class pruebaController {
 
     @DELETE
     @Path("/server/{id: [0-9]+}")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response BorrarServidores(
             @PathParam("id") Integer id,
             @Context HttpServletRequest request) {
