@@ -28,8 +28,8 @@ function ServidoresRest($http, $q, Base64) {
             cache: true,
             method: 'POST',
             url: '/prueba/server',
-            data: $.param(data),
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            data: JSON.stringify(data),
+            headers: {'Content-Type': 'application/json'}
         }).success(function (data) {
             defered.resolve(data);
         }).error(function (err) {
@@ -45,8 +45,8 @@ function ServidoresRest($http, $q, Base64) {
             cache: true,
             method: 'PUT',
             url: '/prueba/server/' + data.id,
-            data: $.param(data),
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            data: JSON.stringify(data),
+            headers: {'Content-Type': 'application/json'}
         }).success(function (data) {
             defered.resolve(data);
         }).error(function (err) {

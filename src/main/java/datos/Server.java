@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
@@ -17,6 +18,7 @@ import org.apache.commons.dbutils.handlers.BeanListHandler;
  *
  * @author lacripta
  */
+@XmlRootElement
 public class Server {
 
     String name;
@@ -83,7 +85,6 @@ public class Server {
             ResultSetHandler<List<Server>> h = new BeanListHandler<>(Server.class);
             String sql = "select * from server where id = ?";
             List<Server> servers = db.getQuery().query(db.getDB(), sql, new Object[]{id}, h);
-            System.out.println("servers = " + servers);
             if (servers.isEmpty()) {
                 return new Server();
             } else {
@@ -91,8 +92,8 @@ public class Server {
             }
         } catch (IOException | SQLException | ClassNotFoundException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
-        return null;
     }
 
     public Integer editServer(Server server) {
@@ -102,8 +103,8 @@ public class Server {
             return servers;
         } catch (IOException | SQLException | ClassNotFoundException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            return 0;
         }
-        return null;
     }
 
     public Integer addServer(Server server) {
@@ -113,8 +114,8 @@ public class Server {
             return servers;
         } catch (IOException | SQLException | ClassNotFoundException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            return 0;
         }
-        return null;
     }
 
     public Integer deleteServer(Integer id) {
@@ -124,7 +125,7 @@ public class Server {
             return servers;
         } catch (IOException | SQLException | ClassNotFoundException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            return 0;
         }
-        return null;
     }
 }
