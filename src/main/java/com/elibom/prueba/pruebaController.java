@@ -92,7 +92,7 @@ public class pruebaController {
             @Context HttpServletRequest request) {
         Server server = new Server(name, state, id);
         return Response.ok().entity(
-                gson.toJson(model.EditarServidores())
+                gson.toJson(model.EditarServidores(server))
         ).build();
     }
 
