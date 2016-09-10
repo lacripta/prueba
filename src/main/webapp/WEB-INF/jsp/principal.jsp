@@ -80,6 +80,7 @@
                 vm.borrarElemento = borrarElemento;
                 vm.nuevoElemento = nuevoElemento;
                 function nuevoElemento() {
+                    $scope.selected = {};
                     $scope.selected.accion = 'nuevo';
                     var modalInstance = $uibModal.open({
                         templateUrl: "/prueba/server_new",
@@ -105,7 +106,7 @@
                         title: "SE BORRARA EL ELEMENTO SELECCIONADO",
                         text: "Seguro de borrar este servidor?",
                         type: "warning",
-                        showCancelButton: false,
+                        showCancelButton: true,
                         confirmButtonText: "Aceptar",
                         cancelButtonText: "Cancelar",
                         closeOnConfirm: true,
@@ -113,8 +114,8 @@
                     }, function (isConfirm) {
                         if (isConfirm) {
                             ServidoresRest.borrar(id).then(function (json) {
-                                Notificar.ajax(json);
                                 $timeout(function () {
+                                    Notificar.ajax(json);
                                     vm.dtInstance.changeData(ServidoresRest.listar());
                                 }, 500);
                             }, function (err) {
