@@ -1,7 +1,3 @@
-/*
- * PROGRAMA PROPIEDAD DE LA EMPRESA DE ENERGIA DE ARAUCA ENELAR E.S.P.
- * Este codigo fuente es de uso exclusivo de la empresa de energia de arauca
- */
 package com.elibom.prueba;
 
 import com.google.gson.Gson;
@@ -24,10 +20,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-/**
- *
- * @author ENELAR E.S.P.
- */
 @Stateless
 @Path("/")
 public class pruebaController {
