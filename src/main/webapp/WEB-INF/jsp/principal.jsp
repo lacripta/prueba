@@ -8,6 +8,9 @@
             .glyphicon{
                 font-size: large;
             }
+            table{
+                width: 100%;
+            }
         </style>
         <%@include file="html/header.jsp" %>
     </head>
