@@ -51,11 +51,20 @@ public class pruebaModel {
 
     public Map<String, Object> EditarServidores(Server edita) {
         Map<String, Object> salida = new HashMap();
-        salida.put("mensaje", "OK");
-        salida.put("respuesta", "OK");
-        salida.put("data", "");
-        salida.put("cantidad", "1");
-        salida.put("estado", 1);
+        Integer editados = edita.editServer(edita);
+        if (editados > 0) {
+            salida.put("mensaje", "CAMBIOS REALIZADOS CORRECTAMENTE");
+            salida.put("respuesta", "Se cambio la información del servidor: " + edita.getName());
+            salida.put("data", "-");
+            salida.put("cantidad", editados);
+            salida.put("estado", 1);
+        } else {
+            salida.put("mensaje", "NO SE HAN REALIZADO CAMBIOS");
+            salida.put("respuesta", "no se hicieron cambios en el servidor: " + edita.getName());
+            salida.put("data", "-");
+            salida.put("cantidad", editados);
+            salida.put("estado", 1);
+        }
         return salida;
 
     }
