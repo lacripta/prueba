@@ -5,20 +5,6 @@
  */
 package datos;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.xml.bind.annotation.XmlRootElement;
-import org.apache.commons.dbutils.ResultSetHandler;
-import org.apache.commons.dbutils.handlers.BeanListHandler;
-
-/**
- *
- * @author lacripta
- */
-@XmlRootElement
 public class Server {
 
     String name;
@@ -66,66 +52,5 @@ public class Server {
     @Override
     public String toString() {
         return "Server{" + "name=" + name + ", state=" + state + ", id=" + id + '}';
-    }
-
-    public List<Server> findAll() {
-        try (conex db = new conex()) {
-            ResultSetHandler<List<Server>> h = new BeanListHandler<>(Server.class);
-            String sql = "select * from server";
-            List<Server> servers = db.getQuery().query(db.getDB(), sql, h);
-            return servers;
-        } catch (IOException | SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
-
-    public Server findServerById(Integer id) {
-        try (conex db = new conex()) {
-            ResultSetHandler<List<Server>> h = new BeanListHandler<>(Server.class);
-            String sql = "select * from server where id = ?";
-            List<Server> servers = db.getQuery().query(db.getDB(), sql, new Object[]{id}, h);
-            if (servers.isEmpty()) {
-                return new Server();
-            } else {
-                return servers.get(0);
-            }
-        } catch (IOException | SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
-    }
-
-    public Integer editServer(Server server) {
-        try (conex db = new conex()) {
-            String sql = "update server set name = ?, state = ? where id = ?";
-            Integer servers = db.getQuery().update(db.getDB(), sql, new Object[]{server.name, server.state, server.id});
-            return servers;
-        } catch (IOException | SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-            return 0;
-        }
-    }
-
-    public Integer addServer(Server server) {
-        try (conex db = new conex()) {
-            String sql = "insert into server (name,state) values(?,?)";
-            Integer servers = db.getQuery().update(db.getDB(), sql, new Object[]{server.name, server.state});
-            return servers;
-        } catch (IOException | SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-            return 0;
-        }
-    }
-
-    public Integer deleteServer(Integer id) {
-        try (conex db = new conex()) {
-            String sql = "delete from server where id = ?";
-            Integer servers = db.getQuery().update(db.getDB(), sql, new Object[]{id});
-            return servers;
-        } catch (IOException | SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-            return 0;
-        }
     }
 }
