@@ -28,8 +28,8 @@ function ServidoresRest($http, $q, Base64) {
             cache: true,
             method: 'POST',
             url: '/prueba/server',
-            data: JSON.stringify(data),
-            headers: {'Content-Type': 'application/json'}
+            data: $.param({nuevo: JSON.stringify(data)}),
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).success(function (data) {
             defered.resolve(data);
         }).error(function (err) {
@@ -45,8 +45,8 @@ function ServidoresRest($http, $q, Base64) {
             cache: true,
             method: 'PUT',
             url: '/prueba/server/' + data.id,
-            data: JSON.stringify(data),
-            headers: {'Content-Type': 'application/json'}
+            data: $.param({editar: JSON.stringify(data)}),
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).success(function (data) {
             defered.resolve(data);
         }).error(function (err) {
@@ -70,5 +70,35 @@ function ServidoresRest($http, $q, Base64) {
         return promise;
     }
 }
+function QuitarAcentos() {
+    var in_chrs = 'àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ',
+            out_chrs = 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY',
+            chars_rgx = new RegExp('[' + in_chrs + ']', 'g'),
+            transl = {}, i,
+            lookup = function (m) {
+                return transl[m] || m;
+            };
+    for (i = 0; i < in_chrs.length; i++) {
+        transl[ in_chrs[i] ] = out_chrs[i];
+    }
+
+    return function (s) {
+        return s.replace(chars_rgx, lookup);
+    };
+}
+function Promesa($q) {
+    return function (datos) {
+        var defered = $q.defer();
+        var promise = defered.promise;
+        if (datos) {
+            defered.resolve(datos);
+        } else {
+            defered.resolve({});
+        }
+        return promise;
+    };
+}
 angular.module('prueba')
+        .service('QuitarAcentos', QuitarAcentos)
+        .service('Promesa', Promesa)
         .service('ServidoresRest', ServidoresRest);
