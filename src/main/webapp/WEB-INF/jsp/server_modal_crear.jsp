@@ -13,7 +13,7 @@
                                 <select-datos titulo="Estado" valor="selected.state" col="12" required="true" datos="estados" label="estado" value="state"></select-datos>
                             </fieldset>
                             <div class="col-xs-12 text-center btn-group">
-                                <button class="btn btn-raised btn-info" ng-click="ok(datosServer.$valid)">save</button>
+                                <button class="btn btn-raised btn-info" ng-click="ok(datosServer)">save</button>
                                 <button class="btn btn-raised btn-danger" type="submit" ng-click="cancel()"><strong>cancel</strong></button>
                             </div>
                         </form>
