@@ -5,98 +5,51 @@
  */
 package com.elibom.prueba;
 
+import datos.Resultado;
 import datos.Server;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import datos.ServerDAO;
 
 /**
  *
- * @author USERPC
+ * @author lacripta
  */
 public class pruebaModel {
 
-    public Map<String, Object> ListarServidores() {
-        Map<String, Object> salida = new HashMap();
-        Server server = new Server();
-        List<Server> servidores = server.findAll();
-        if (servidores.isEmpty()) {
-            salida.put("mensaje", "NO SE HAN ENCONTRADO DATOS");
-            salida.put("respuesta", "No existen servidores registrados actualmente");
-            salida.put("data", servidores);
-            salida.put("cantidad", servidores.size());
-            salida.put("estado", 0);
-        } else {
-            salida.put("mensaje", "SE HA ENCONTRADO LOS SERVIDORES");
-            salida.put("respuesta", "Lista de los servidores registrados");
-            salida.put("data", servidores);
-            salida.put("cantidad", servidores.size());
-            salida.put("estado", 1);
+    public Resultado ListarServidores() {
+        Resultado servidores = ServerDAO.findAll();
+        if (servidores.isEstado()) {
+            servidores.setMensaje("SE HA ENCONTRADO LOS SERVIDORES");
+            servidores.setRespuesta("Lista de los servidores registrados en la base de datos");
         }
-
-        return salida;
-
+        return servidores;
     }
 
-    public Map<String, Object> AgregarServidores(Server nuevo) {
-        Map<String, Object> salida = new HashMap();
-        Integer creados = nuevo.addServer(nuevo);
-        if (creados > 0) {
-            salida.put("mensaje", "SERVIDOR CREADO CORRECTAMENTE");
-            salida.put("respuesta", "Se creo el nuevo servidor: " + nuevo.getName());
-            salida.put("data", "-");
-            salida.put("cantidad", creados);
-            salida.put("estado", 1);
-        } else {
-            salida.put("mensaje", "NO SE HAN REALIZADO CAMBIOS");
-            salida.put("respuesta", "no se agregado ningun servidor");
-            salida.put("data", "-");
-            salida.put("cantidad", creados);
-            salida.put("estado", 0);
+    public Resultado AgregarServidores(Server nuevo) {
+        Resultado creados = ServerDAO.addServer(nuevo);
+        if (creados.isEstado()) {
+            creados.setMensaje("SERVIDOR CREADO CORRECTAMENTE");
+            creados.setRespuesta("Se creo el nuevo servidor: " + nuevo.getName());
         }
-        return salida;
-
+        return creados;
     }
 
-    public Map<String, Object> EditarServidores(Server edita) {
-        Map<String, Object> salida = new HashMap();
-        Integer editados = edita.editServer(edita);
-        if (editados > 0) {
-            salida.put("mensaje", "CAMBIOS REALIZADOS CORRECTAMENTE");
-            salida.put("respuesta", "Se cambio la información del servidor: " + edita.getName());
-            salida.put("data", "-");
-            salida.put("cantidad", editados);
-            salida.put("estado", 1);
-        } else {
-            salida.put("mensaje", "NO SE HAN REALIZADO CAMBIOS");
-            salida.put("respuesta", "no se hicieron cambios en el servidor: " + edita.getName());
-            salida.put("data", "-");
-            salida.put("cantidad", editados);
-            salida.put("estado", 0);
+    public Resultado EditarServidores(Server edita) {
+        Resultado editados = ServerDAO.editServer(edita);
+        if (editados.isEstado()) {
+            editados.setMensaje("CAMBIOS REALIZADOS CORRECTAMENTE");
+            editados.setRespuesta("Se cambio la información del servidor: " + edita.getName());
         }
-        return salida;
-
+        return editados;
     }
 
-    public Map<String, Object> BorrarServidores(Integer id) {
-        Server edita = new Server();
-        edita = edita.findServerById(id);
-        Map<String, Object> salida = new HashMap();
-        Integer editados = edita.deleteServer(id);
-        if (editados > 0) {
-            salida.put("mensaje", "SERVIDOR ELIMINADO");
-            salida.put("respuesta", "Se borro el servidor: " + edita.getName());
-            salida.put("data", "-");
-            salida.put("cantidad", editados);
-            salida.put("estado", 1);
-        } else {
-            salida.put("mensaje", "NO SE HAN REALIZADO CAMBIOS");
-            salida.put("respuesta", "no se hicieron cambios en el servidor: " + edita.getName());
-            salida.put("data", "-");
-            salida.put("cantidad", editados);
-            salida.put("estado", 0);
+    public Resultado BorrarServidores(Integer id) {
+        Resultado editados = ServerDAO.findServerById(id);
+        Server edita = (Server) editados.getData();
+        editados = ServerDAO.deleteServer(id);
+        if (editados.isEstado()) {
+            editados.setMensaje("SERVIDOR ELIMINADO");
+            editados.setRespuesta("Se borro el servidor: " + edita.getName());
         }
-        return salida;
-
+        return editados;
     }
 }
