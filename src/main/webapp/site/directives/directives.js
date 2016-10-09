@@ -1,4 +1,4 @@
-function selectConfirma() {
+function selectConfirma(QuitarAcentos) {
     return {
         restrict: 'E',
         templateUrl: 'site/templates/select-confirma.html',
@@ -9,18 +9,19 @@ function selectConfirma() {
             required: '=',
             titulo: '@'
         },
-        link: function (scope, element) {
+        link: function (scope) {
+            scope.nombre = QuitarAcentos(scope.titulo).split(' ').join('_');
             $('.select').select2({
                 placeholder: "Escoja una opcion",
                 language: 'es'
             });
         },
-        controller: function ($http, $scope) {
+        controller: function ($scope) {
             $scope.acciones = [{codigo: "S", descripcion: "SI"}, {codigo: "N", descripcion: "NO"}];
         }
     };
 }
-function selectDatos() {
+function selectDatos(QuitarAcentos) {
     return {
         restrict: 'E',
         templateUrl: 'site/templates/select-datos.html',
@@ -34,17 +35,18 @@ function selectDatos() {
             value: '@',
             label: '@'
         },
-        link: function (scope, element) {
+        link: function (scope) {
+            scope.nombre = QuitarAcentos(scope.titulo).split(' ').join('_');
             $('.select').select2({
                 placeholder: "Escoja una opcion",
                 language: 'es'
             });
         },
-        controller: function ($scope) {
+        controller: function () {
         }
     };
 }
-function selectSimple() {
+function selectSimple(QuitarAcentos) {
     return {
         restrict: 'E',
         templateUrl: 'site/templates/select-simple.html',
@@ -58,17 +60,18 @@ function selectSimple() {
             value: '@',
             label: '@'
         },
-        link: function (scope, element) {
+        link: function (scope) {
+            scope.nombre = QuitarAcentos(scope.titulo).split(' ').join('_');
             $('.select').select2({
                 placeholder: "Escoja una opcion",
                 language: 'es'
             });
         },
-        controller: function ($scope) {
+        controller: function () {
         }
     };
 }
-function selectObjeto() {
+function selectObjeto(QuitarAcentos) {
     return {
         restrict: 'E',
         templateUrl: 'site/templates/select-datos.html',
@@ -82,21 +85,23 @@ function selectObjeto() {
             value: '@',
             label: '@'
         },
-        link: function (scope, element) {
+        link: function (scope) {
+            scope.nombre = QuitarAcentos(scope.titulo).split(' ').join('_');
             $('.select').select2({
                 placeholder: "Escoja una opcion",
                 language: 'es'
             });
         },
-        controller: function ($scope) {
+        controller: function () {
         }
     };
 }
-function inputText() {
+function inputText(QuitarAcentos) {
     return {
         restrict: 'E',
         templateUrl: 'site/templates/input-text.html',
         link: function (scope, element) {
+            scope.nombre = QuitarAcentos(scope.titulo).split(' ').join('_');
             $.material.init(element);
         },
         scope: {
@@ -115,11 +120,12 @@ function inputText() {
         }
     };
 }
-function inputNumber() {
+function inputNumber(QuitarAcentos) {
     return {
         restrict: 'E',
         templateUrl: 'site/templates/input-number.html',
         link: function (scope, element) {
+            scope.nombre = QuitarAcentos(scope.titulo).split(' ').join('_');
             $.material.init(element);
         },
         scope: {
@@ -129,16 +135,17 @@ function inputNumber() {
             required: '=',
             titulo: '@'
         },
-        controller: function ($scope) {
+        controller: function () {
 
         }
     };
 }
-function inputRadio() {
+function inputRadio(QuitarAcentos) {
     return {
         restrict: 'E',
         templateUrl: 'site/templates/input-radio.html',
         link: function (scope, element) {
+            scope.nombre = QuitarAcentos(scope.titulo).split(' ').join('_');
             $.material.init(element);
         },
         scope: {
@@ -154,7 +161,7 @@ function inputRadio() {
         }
     };
 }
-function inputDate() {
+function inputDate(QuitarAcentos) {
     return {
         restrict: 'E',
         templateUrl: 'site/templates/input-date.html',
@@ -167,6 +174,7 @@ function inputDate() {
             titulo: '@'
         },
         link: function (scope, element, attrs, ctrl) {
+            scope.nombre = QuitarAcentos(scope.titulo).split(' ').join('_');
             var input = element.find('.datePicker');
             $(input).datepicker({
                 language: 'es',
@@ -187,7 +195,7 @@ function inputDate() {
         }
     };
 }
-function inputMeses() {
+function inputMeses(QuitarAcentos) {
     return {
         restrict: 'E',
         templateUrl: 'site/templates/input-date.html',
@@ -199,6 +207,7 @@ function inputMeses() {
             titulo: '@'
         },
         link: function (scope, element, attrs, ctrl) {
+            scope.nombre = QuitarAcentos(scope.titulo).split(' ').join('_');
             var input = element.find('.datePicker');
             $(input).datepicker({
                 language: 'es',

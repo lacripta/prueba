@@ -1,3 +1,18 @@
+function Fechas() {
+    var fecha = {};
+    fecha.toString = function (fecha) {
+        moment.locale('es');
+        return moment(fecha).format('L');
+    };
+    fecha.nombreArchivo = function (fecha) {
+        moment.locale('es');
+        return moment(fecha).format('DDMMYYYY');
+    };
+    fecha.toDate = function () {
+
+    };
+    return fecha;
+}
 function Notificar(SweetAlert) {
     var alerta = {};
 
@@ -9,6 +24,17 @@ function Notificar(SweetAlert) {
     };
     alerta.form = function () {
         SweetAlert.swal("EL FORMULARIO NO ESTA COMPLETO", "Debe llenar todos los campos del formulario", "error");
+    };
+    alerta.required = function (lista) {
+        var errores = [];
+        $.each(lista, function (k, v) {
+            $.each(v, function (kk, vv) {
+                $.each(vv.$error, function (kkk, vvv) {
+                    errores.push(vvv[0].$name.replace('f_', '').split('_').join(' '));
+                });
+            });
+        });
+        SweetAlert.swal("EL FORMULARIO NO ESTA COMPLETO", "Faltan los campos: " + errores.toString(), "error");
     };
     alerta.limpiar = function () {
         SweetAlert.swal("SE HAN LIMPIADO LOS CAMPOS", "Se acaban de borrar todos los datos del formulario", "warning");
@@ -131,5 +157,6 @@ function Base64() {
     };
 }
 angular.module('prueba')
+        .factory('Fechas', Fechas)
         .factory('Base64', Base64)
         .factory('Notificar', Notificar);

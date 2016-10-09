@@ -2,7 +2,7 @@
     <div>
         <div class="form-group" ng-class="{'has-error' : !interno.IDFECHA.$valid}"  >
             <label class="control-label">{{titulo}}</label>
-            <input class="form-control datePicker" type="text" name="IDFECHA"
+            <input class="form-control inputDate" type="text" name="IDFECHA"
                    ng-model="valor" ng-required="required" ng-readonly="readonly">
             <span class="help-block col-xs-12" ng-show="interno.IDFECHA.$touched">
                 <small class="help-block" ng-show="interno.entrada.$error.required">Este campo es requerido</small>
