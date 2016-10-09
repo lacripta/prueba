@@ -128,8 +128,8 @@
                     });
                 }
                 function ServerModalController($scope, $uibModalInstance, Notificar) {
-                    $scope.ok = function (ok) {
-                        if (ok) {
+                    $scope.ok = function (form) {
+                        if (form.$valid) {
                             switch ($scope.selected.accion) {
                                 case "ver":
                                     ServidoresRest.editar($scope.selected).then(function (json) {
@@ -155,7 +155,7 @@
                             }, 500);
                             $uibModalInstance.close();
                         } else {
-                            Notificar.form();
+                            Notificar.required(form.$error);
                         }
                     };
                     $scope.cancel = function () {
