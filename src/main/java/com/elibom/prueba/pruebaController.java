@@ -10,6 +10,7 @@ import javax.ejb.Stateless;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -64,38 +65,40 @@ public class pruebaController {
             return Response.ok().entity(gson.toJson(AccesoDenegado())).header("content-type", MediaType.APPLICATION_JSON).build();
         }
         return Response.ok().entity(
-                gson.toJson(model.ListarServidores())
-        ).build();
+                gson.toJson(model.ListarServidores()
+                )).build();
     }
 
     @POST
     @Path("/server")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
     public Response AgergarServidores(
-            Server nuevo,
+            @FormParam("nuevo") String nuevo,
             @Context HttpServletRequest request) {
         if (VerificaPeticion(request.getHeader("authorization"))) {
             return Response.ok().entity(gson.toJson(AccesoDenegado())).header("content-type", MediaType.APPLICATION_JSON).build();
         }
+        Server server = gson.fromJson(nuevo, Server.class);
         return Response.ok().entity(
-                gson.toJson(model.AgregarServidores(nuevo))
-        ).build();
+                gson.toJson(model.AgregarServidores(server)
+                )).build();
     }
 
     @PUT
     @Path("/server/{id: [0-9]+}")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
     public Response ActualizarServidores(
-            Server server,
+            @FormParam("editar") String editar,
             @Context HttpServletRequest request) {
         if (VerificaPeticion(request.getHeader("authorization"))) {
             return Response.ok().entity(gson.toJson(AccesoDenegado())).header("content-type", MediaType.APPLICATION_JSON).build();
         }
+        Server server = gson.fromJson(editar, Server.class);
         return Response.ok().entity(
-                gson.toJson(model.EditarServidores(server))
-        ).build();
+                gson.toJson(model.EditarServidores(server)
+                )).build();
     }
 
     @DELETE
@@ -108,8 +111,8 @@ public class pruebaController {
             return Response.ok().entity(gson.toJson(AccesoDenegado())).header("content-type", MediaType.APPLICATION_JSON).build();
         }
         return Response.ok().entity(
-                gson.toJson(model.BorrarServidores(id))
-        ).build();
+                gson.toJson(model.BorrarServidores(id)
+                )).build();
 
     }
 
