@@ -15,12 +15,12 @@ import org.sql2o.Sql2o;
  */
 public class DB {
 
-    public static final Sql2o ELIBOM;
+    public static final Sql2o CON;
 
     static {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            ELIBOM = new Sql2o("jdbc:mysql://localhost:3306/tabla", "root", "");
+            CON = new Sql2o("jdbc:mysql://localhost:3306/tabla", "root", "");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
             throw new RuntimeException("NO SE PUEDE ESTABLECER LA CONEXIONA LA BASE DE DATOS");

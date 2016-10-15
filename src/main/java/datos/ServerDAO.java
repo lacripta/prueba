@@ -20,7 +20,7 @@ public final class ServerDAO {
     private static final Logger LOG = Logger.getLogger(ServerDAO.class.getName());
 
     public static Resultado findAll() {
-        try (Connection con = DB.ELIBOM.beginTransaction()) {
+        try (Connection con = DB.CON.beginTransaction()) {
             String sql = "select * from server";
             List<Server> servers = con.createQuery(sql)
                     .executeAndFetch(Server.class);
@@ -34,7 +34,7 @@ public final class ServerDAO {
     }
 
     public static Resultado findServerById(Integer id) {
-        try (Connection con = DB.ELIBOM.beginTransaction()) {
+        try (Connection con = DB.CON.beginTransaction()) {
             String sql = "select * from server where id = :id";
             Server servers = con.createQuery(sql)
                     .addParameter("id", id)
@@ -49,7 +49,7 @@ public final class ServerDAO {
     }
 
     public static Resultado editServer(Server server) {
-        try (Connection con = DB.ELIBOM.beginTransaction()) {
+        try (Connection con = DB.CON.beginTransaction()) {
             String sql = "update server set name = :name, state = :state where id = :id";
             con.createQuery(sql)
                     .bind(server)
@@ -64,7 +64,7 @@ public final class ServerDAO {
     }
 
     public static Resultado addServer(Server server) {
-        try (Connection con = DB.ELIBOM.beginTransaction()) {
+        try (Connection con = DB.CON.beginTransaction()) {
             String sql = "insert into server (name,state) values(:name,:state)";
             con.createQuery(sql)
                     .bind(server)
@@ -79,7 +79,7 @@ public final class ServerDAO {
     }
 
     public static Resultado deleteServer(Integer id) {
-        try (Connection con = DB.ELIBOM.beginTransaction()) {
+        try (Connection con = DB.CON.beginTransaction()) {
             String sql = "delete from server where id = :id";
             con.createQuery(sql)
                     .addParameter("id", id)
