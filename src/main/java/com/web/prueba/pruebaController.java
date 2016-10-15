@@ -1,4 +1,4 @@
-package com.elibom.prueba;
+package com.web.prueba;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

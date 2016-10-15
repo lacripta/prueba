@@ -20,7 +20,7 @@ public class DB {
     static {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            ELIBOM = new Sql2o("jdbc:mysql://localhost:3306/elibom", "root", "910320");
+            ELIBOM = new Sql2o("jdbc:mysql://localhost:3306/tabla", "root", "");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
             throw new RuntimeException("NO SE PUEDE ESTABLECER LA CONEXIONA LA BASE DE DATOS");
